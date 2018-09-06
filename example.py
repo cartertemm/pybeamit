@@ -1,6 +1,6 @@
-import justbeamit
+from pybeamit import justBeamIt
 
-j=justbeamit.justBeamIt("file.wav")
+j=justBeamIt("file.wav")
 t=j.tokenise()
 print("retrieval url: "+t)
 print("starting the transfer")

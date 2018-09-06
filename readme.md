@@ -13,11 +13,11 @@ First, install requirements with
 Then:
 
 ```
-import justbeamit
+from pybeamit import justBeamIt
 
-j=justbeamit.justBeamIt("file.wav")
+j=justBeamIt("file.wav")
 #or for multiple files:
-j=justbeamit.justBeamIt(("file.wav", "file2.mp3"))
+j=justBeamIt(("file.wav", "file2.mp3"))
 t=j.tokenise()
 print("retrieval url for recipient: "+t)
 print("starting the transfer")
