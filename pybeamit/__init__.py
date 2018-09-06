@@ -15,7 +15,7 @@ class justBeamIt:
 			base_url="https://www.justbeamit.com"
 		self.base_url=base_url
 		if not backend_url:
-			backend_url="http://www.justbeamit.com/ping?server_root=1"
+			backend_url="https://www.justbeamit.com/ping?server_root=1"
 		self.backend_url=backend_url
 		self.backend=None
 		self.token=None
