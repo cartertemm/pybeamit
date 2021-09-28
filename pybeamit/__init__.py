@@ -61,11 +61,11 @@ class justBeamIt:
 		self.token = r.json()["token"]
 		return self.base_url + "/" + self.token
 
-	def transfer(self, progressCallback=None):
+	def transfer(self, progress_callback=None):
 		"""blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
-		progressCallback will be called internally with one parameter, percentage"""
-		if not progressCallback or not callable(progress_callback):
-			progressCallback = lambda mon: None
+		progress_callback will be called internally with one parameter, percentage"""
+		if not progress_callback or not callable(progress_callback):
+			progress_callback = lambda mon: None
 		# we expect a token to be generated beforehand, a transfer would be pointless otherwise
 		if not self.token:
 			raise justbeamitError("must generate a token (tokenise) first")
@@ -89,7 +89,8 @@ class justBeamIt:
 					)
 				}
 			)
-			monitor = MultipartEncoderMonitor(m, progressCallback)
+			cb = lambda mon:progress_callback((mon.bytes_read/mon.len)*100)
+			monitor = MultipartEncoderMonitor(m, cb)
 			r = requests.post(
 				self.backend + "/upload",
 				data=monitor,
@@ -110,10 +111,10 @@ class justBeamIt:
 	def download(self, url_or_token, path=None, progress_callback=None, chunk_size=1024):
 		"""Blocking function that initiates a download.
 		The downloaded file will be saved in path (if provided) otherwise the current directory.
-		progressCallback will be called internally with one parameter, percentage.
+		progress_callback will be called internally with one parameter, percentage.
 		"""
 		if not progress_callback or not callable(progress_callback):
-			progressCallback = lambda mon: None
+			progress_callback = lambda mon: None
 		if not self.backend:
 			self.get_backend()
 		token = self._parse_token(url_or_token)
