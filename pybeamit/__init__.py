@@ -29,8 +29,6 @@ class justBeamIt:
 		self.backend = None
 		self.token = None
 		self.files = files
-		if not self.files:
-			raise justbeamitError("no files provided")
 		if isinstance(self.files, str):
 			self.files = [self.files]
 
@@ -42,6 +40,8 @@ class justBeamIt:
 
 	def tokenise(self):
 		"""constructs data and returns the token (http://justbeamit.com/token) needed for downloading"""
+		if not self.files:
+			raise justbeamitError("no files provided")
 		if not self.backend:
 			self.get_backend()
 		files = [
@@ -118,9 +118,7 @@ class justBeamIt:
 			self.get_backend()
 		token = self._parse_token(url_or_token)
 		download_url = urljoin(self.backend, "download")
-		print("getting")
 		r = requests.get(download_url, {"token": token, "type": "CLI"}, stream=True)
-		print("got")
 		r.raise_for_status()
 		# invalid tokens are indicated in the body of a request with a successful status code
 		try:
