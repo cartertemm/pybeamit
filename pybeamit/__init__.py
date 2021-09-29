@@ -1,10 +1,11 @@
 #
 # PyBeamIt
-# A quick and easy wrapper over the justbeamit.com peer to peer file sharing service
+# A quick and easy wrapper over the justbeamit.com service to facilitate p2p file sharing in a variety of applications
 # more at https://github.com/cartertemm/pybeamit
 # Copyright (c) 2021 Carter Temm <cartertemm@gmail.com>
 # distributed under the terms of the MIT license, which should have been included along with this code
 # if not, see https://opensource.org/licenses/MIT
+#
 
 
 import os
@@ -48,7 +49,8 @@ class JustBeamIt:
 		self.backend = r.json()["serverRoot"]
 
 	def tokenise(self):
-		"""constructs data and returns the token (http://justbeamit.com/token) needed for downloading"""
+		"""Initiates the transfer with a backend server, returning a URL for download.
+		note: This must be called on the sender's machine."""
 		if not self.files:
 			raise JustBeamItError("no files provided")
 		if not self.backend:
@@ -85,9 +87,11 @@ class JustBeamIt:
 			raise JustBeamItError("invalid token")
 
 	def transfer(self, progress_callback=None):
-		"""Perform the transfer.
-		note: As of version 0.3, wait must be called first to ensure the other peer is available to receive the file
-		progress_callback will be called internally with one parameter, percentage"""
+		"""Perform the transfer, blocking until complete.
+		progress_callback will be called internally with one parameter, percentage
+
+		note: As of version 0.3, wait must be called first to ensure the other peer is ready to receive the file.
+		"""
 		if not progress_callback or not callable(progress_callback):
 			progress_callback = lambda mon: None
 		for i, f in enumerate(self.files):

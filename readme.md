@@ -15,9 +15,9 @@ Then on the sender's machine:
 ```
 from pybeamit import JustBeamIt
 
-j=justBeamIt("file.wav")
+j = JustBeamIt("file.wav")
 #or for multiple files:
-j=JustBeamIt(("file.wav", "file2.mp3"))
+j = JustBeamIt(("file.wav", "file2.mp3"))
 t=j.tokenise()
 print("retrieval url for recipient: "+t)
 print("waiting for recipient...")
@@ -39,23 +39,30 @@ j.download(url, path="dest")
 
 There are also a couple [demos](https://github.com/cartertemm/pybeamit/tree/master/demos).
 
-All operations require a justBeamIT object:
+All operations require a JustBeamIt object:
 
 ```
 class JustBeamIt(files=[], base_url=None, backend_url=None)
 ```
 
-Once we have our instance, the following methods are defined:
+Once you have an instance, the following methods are defined:
 
 ```
 tokenise()
-	"""constructs data and returns the token (http://justbeamit.com/token) needed for downloading"""
+	Initiates the transfer with a backend server, returning a URL for download.
+	note: This must be called on the sender's machine.
+```
+
+```
+wait()
+	Blocks until a recipient is available to receive the file.
 ```
 
 ```
 transfer(progress_callback=None)
-	blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
-	progress_callback will be called internally with one parameter, the percentage of the transfer (0-100).
+	Perform the transfer, blocking until complete.
+	progress_callback will be called internally with one parameter, percentage
+	note: As of version 0.3, wait must be called first to ensure the other peer is ready to receive the file.
 ```
 
 ```
