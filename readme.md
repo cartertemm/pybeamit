@@ -2,15 +2,23 @@
 
 This is a python wrapper around the unofficial [just beam it](http://justbeamit.com) API. It supports both sending and receiving files.
 
+## Installation
+
+Via pip:
+```
+$ pip install pybeamit
+```
+Or from source:
+```
+$ git clone https://github.com/cartertemm/pybeamit.git
+$ pip install .
+```
+
 ## Usage
 
 Integrating P2P file sharing capability in your application is extremely simple.
 
-First, install requirements with
-
-```pip install -r requirements.txt```
-
-Then on the sender's machine:
+On the sender's machine:
 
 ```
 from pybeamit import JustBeamIt
