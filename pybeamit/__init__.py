@@ -61,22 +61,26 @@ class justBeamIt:
 		self.token = r.json()["token"]
 		return self.base_url + "/" + self.token
 
-	def transfer(self, progress_callback=None):
-		"""blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
-		progress_callback will be called internally with one parameter, percentage"""
-		if not progress_callback or not callable(progress_callback):
-			progress_callback = lambda mon: None
+	def wait(self):
+		"""Blocks until a recipient is available to receive the file."""
 		# we expect a token to be generated beforehand, a transfer would be pointless otherwise
 		if not self.token:
 			raise justbeamitError("must generate a token (tokenise) first")
+		# a keep alive request that blocks until a recipiant is available to receive the file
 		r = requests.get(
 			self.backend + "/wait", params={"type": "CLI", "token": self.token}
 		)
-		# a keep alive request that blocks until a recipiant is available to receive the file
 		r.raise_for_status()
 		rjson = r.json()
 		if "validToken" in rjson and not rjson["validToken"]:
 			raise justbeamitError("invalid token")
+
+	def transfer(self, progress_callback=None):
+		"""Perform the transfer.
+		note: As of version 0.3, wait must be called first to ensure the other peer is available to receive the file
+		progress_callback will be called internally with one parameter, percentage"""
+		if not progress_callback or not callable(progress_callback):
+			progress_callback = lambda mon: None
 		for i, f in enumerate(self.files):
 			type = mimetypes.guess_type(f)
 			file_obj = open(f, "rb")
