@@ -54,15 +54,15 @@ tokenise()
 
 ```
 transfer(progress_callback=None)
-	"""blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
-	progress_callback will be called internally with one parameter, the percentage of the transfer (0-100)"""
+	blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
+	progress_callback will be called internally with one parameter, the percentage of the transfer (0-100).
 ```
 
 ```
 download(self, url_or_token, path=None, progress_callback=None, chunk_size=1024)
-		"""Blocking function that initiates a download.
-		The downloaded file will be saved in path (if provided) otherwise the current directory.
-		progress_callback will be called internally with one parameter, the percentage of the transfer (0-100).
+	Blocking function that initiates a download.
+	The downloaded file will be saved in path (if provided) otherwise the current directory.
+	progress_callback will be called internally with one parameter, the percentage of the transfer (0-100).
 ```
 
 ## contributing
