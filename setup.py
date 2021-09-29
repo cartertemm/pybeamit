@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
 	name="PyBeamIt",
-	version="0.3",
+	version="0.4",
 	packages=find_packages(),
 	install_requires=open("requirements.txt", "r").read().split("\n"),
 	author="Carter Temm",
