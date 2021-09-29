@@ -1,3 +1,12 @@
+#
+# PyBeamIt
+# A quick and easy wrapper over the justbeamit.com peer to peer file sharing service
+# more at https://github.com/cartertemm/pybeamit
+# Copyright (c) 2021 Carter Temm <cartertemm@gmail.com>
+# distributed under the terms of the MIT license, which should have been included along with this code
+# if not, see https://opensource.org/licenses/MIT
+
+
 import os
 import json
 import mimetypes
@@ -12,11 +21,11 @@ import requests
 from requests_toolbelt import MultipartEncoder, MultipartEncoderMonitor
 
 
-class justbeamitError(Exception):
+class JustBeamItError(Exception):
 	pass
 
 
-class justBeamIt:
+class JustBeamIt:
 	"""Wrapper around the justbeamit.com p2p file sharing service"""
 
 	def __init__(self, files=[], base_url=None, backend_url=None):
@@ -41,7 +50,7 @@ class justBeamIt:
 	def tokenise(self):
 		"""constructs data and returns the token (http://justbeamit.com/token) needed for downloading"""
 		if not self.files:
-			raise justbeamitError("no files provided")
+			raise JustBeamItError("no files provided")
 		if not self.backend:
 			self.get_backend()
 		files = [
@@ -65,7 +74,7 @@ class justBeamIt:
 		"""Blocks until a recipient is available to receive the file."""
 		# we expect a token to be generated beforehand, a transfer would be pointless otherwise
 		if not self.token:
-			raise justbeamitError("must generate a token (tokenise) first")
+			raise JustBeamItError("must generate a token (tokenise) first")
 		# a keep alive request that blocks until a recipiant is available to receive the file
 		r = requests.get(
 			self.backend + "/wait", params={"type": "CLI", "token": self.token}
@@ -73,7 +82,7 @@ class justBeamIt:
 		r.raise_for_status()
 		rjson = r.json()
 		if "validToken" in rjson and not rjson["validToken"]:
-			raise justbeamitError("invalid token")
+			raise JustBeamItError("invalid token")
 
 	def transfer(self, progress_callback=None):
 		"""Perform the transfer.
@@ -129,14 +138,14 @@ class justBeamIt:
 		try:
 			json = r.json()
 			if not json.get("validToken", True):
-				raise justbeamitError("Either the provided token is invalid or the transfer hasn't yet been initiated by sender")
+				raise JustBeamItError("Either the provided token is invalid or the transfer hasn't yet been initiated by sender")
 		except ValueError:
 			pass
 		length = int(r.headers["Content-Length"])
 		# parse the destination filename from the Content-Disposition header
 		fn = r.headers.get("Content-Disposition")
 		if not fn:
-			raise justbeamitError("Failed to locate file name from Content-Disposition header")
+			raise JustBeamItError("Failed to locate file name from Content-Disposition header")
 		fn = fn[fn.find("filename=")+10:-1]
 		path = os.path.join(path or os.curdir, fn)
 		downloaded = 0
@@ -152,3 +161,8 @@ class justBeamIt:
 			url_or_token = url_or_token.rstrip("/")
 			url_or_token = url_or_token.split("/")[-1]
 		return url_or_token
+
+
+# backward compatibility
+justbeamitError = JustBeamItError
+justBeamIt = JustBeamIt

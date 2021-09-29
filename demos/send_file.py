@@ -1,7 +1,7 @@
-from pybeamit import justBeamIt
+from pybeamit import JustBeamIt
 
 
-j = justBeamIt("resources/file.wav")
+j = JustBeamIt("resources/file.wav")
 t = j.tokenise()
 print("retrieval URL:", t)
 print("waiting for recipient...")

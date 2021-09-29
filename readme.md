@@ -13,11 +13,11 @@ First, install requirements with
 Then on the sender's machine:
 
 ```
-from pybeamit import justBeamIt
+from pybeamit import JustBeamIt
 
 j=justBeamIt("file.wav")
 #or for multiple files:
-j=justBeamIt(("file.wav", "file2.mp3"))
+j=JustBeamIt(("file.wav", "file2.mp3"))
 t=j.tokenise()
 print("retrieval url for recipient: "+t)
 print("waiting for recipient...")
@@ -30,10 +30,10 @@ print("done")
 On the receiving end:
 
 ```
-from pybeamit import justBeamIt
+from pybeamit import JustBeamIt
 
 url = ""  # e.g. https://www.justbeamit.com/s8x9j
-j = justBeamIt()
+j = JustBeamIt()
 j.download(url, path="dest")
 ```
 
@@ -42,7 +42,7 @@ There are also a couple [demos](https://github.com/cartertemm/pybeamit/tree/mast
 All operations require a justBeamIT object:
 
 ```
-class justBeamIt(files=[], base_url=None, backend_url=None)
+class JustBeamIt(files=[], base_url=None, backend_url=None)
 ```
 
 Once we have our instance, the following methods are defined:
