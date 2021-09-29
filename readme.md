@@ -1,6 +1,6 @@
 # PyBeamIt
 
-This is a python wrapper around the [just beam it](http://justbeamit.com) API of sorts.
+This is a python wrapper around the unofficial [just beam it](http://justbeamit.com) API. It supports both sending and receiving files.
 
 ## Usage
 
@@ -10,7 +10,7 @@ First, install requirements with
 
 ```pip install -r requirements.txt```
 
-Then:
+Then on the sender's machine:
 
 ```
 from pybeamit import justBeamIt
@@ -24,6 +24,18 @@ print("starting the transfer")
 j.transfer()
 print("done")
 ```
+
+On the receiving end:
+
+```
+from pybeamit import justBeamIt
+
+url = ""  # e.g. https://www.justbeamit.com/s8x9j
+j = justBeamIt()
+j.download(url, path="dest")
+```
+
+There are also a couple [demos](https://github.com/cartertemm/pybeamit/tree/master/demos).
 
 All operations require a justBeamIT object:
 
@@ -39,18 +51,21 @@ tokenise()
 ```
 
 ```
-transfer(progressCallback)
+transfer(progress_callback=None)
 	"""blocking function that does all the hard work. First wait for a recipient, then perform the transfer.
-	progressCallback will be called internally with one parameter, percentage"""
+	progress_callback will be called internally with one parameter, the percentage of the transfer (0-100)"""
 ```
 
-## todo
-
-* Add support for receiving files
+```
+download(self, url_or_token, path=None, progress_callback=None, chunk_size=1024)
+		"""Blocking function that initiates a download.
+		The downloaded file will be saved in path (if provided) otherwise the current directory.
+		progress_callback will be called internally with one parameter, the percentage of the transfer (0-100).
+```
 
 ## contributing
 
-Contributions are appreciated. Submit issues through the issue tracker. New features are accepted through PR's.
+Contributions are appreciated, thanks for your interest! Submit issues through the tracker. New features are accepted through PRs.
 
 ## see also
 
